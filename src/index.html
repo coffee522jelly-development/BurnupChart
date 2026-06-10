@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Burn Up Chart</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/tabler-icons.min.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="project-name-wrap" onclick="document.getElementById('project-name').focus()">
+      <i class="ti ti-pencil pencil-icon" aria-hidden="true"></i>
+      <h1 id="project-name" contenteditable="true" spellcheck="false">Burn Up Chart</h1>
+    </div>
+    <div class="header-right">
+      <div class="data-actions">
+        <button class="btn-icon" id="btn-import" title="JSONから読み込み">📂 読み込み</button>
+        <button class="btn-icon" id="btn-export" title="JSONで保存">💾 書き出し</button>
+      </div>
+      <nav class="app-nav">
+        <button class="nav-btn active" data-page="period">期間設定</button>
+        <button class="nav-btn" data-page="tasks">タスク</button>
+        <button class="nav-btn" data-page="chart">チャート</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="app-main">
+
+    <!-- ========== 期間設定ページ ========== -->
+    <section class="page" id="page-period">
+      <div class="card">
+        <h2 class="section-title">期間・稼働日設定</h2>
+        <div class="period-row">
+          <div class="field">
+            <label for="start">開始日</label>
+            <input type="date" id="start">
+          </div>
+          <span class="period-sep">〜</span>
+          <div class="field">
+            <label for="end">終了日</label>
+            <input type="date" id="end">
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card">
+            <span class="stat-label">期間</span>
+            <span class="stat-value" id="total-days">－</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">休日</span>
+            <span class="stat-value holiday-val" id="holiday-count">0 日</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">稼働日</span>
+            <span class="stat-value work-val" id="work-days">－</span>
+          </div>
+        </div>
+        <div class="legend-row">
+          <span class="legend-item"><span class="legend-dot dot-range"></span>期間内</span>
+          <span class="legend-item"><span class="legend-dot dot-weekend"></span>土日（自動）</span>
+          <span class="legend-item"><span class="legend-dot dot-holiday"></span>休日（クリックで設定）</span>
+        </div>
+        <div class="calendar-wrap">
+          <div class="cal-nav">
+            <button id="prev-month">&#8249;</button>
+            <span id="month-label" class="month-label"></span>
+            <button id="next-month">&#8250;</button>
+          </div>
+          <div class="cal-dow">
+            <span class="dow sun">日</span><span class="dow">月</span><span class="dow">火</span>
+            <span class="dow">水</span><span class="dow">木</span><span class="dow">金</span>
+            <span class="dow sat">土</span>
+          </div>
+          <div class="cal-days" id="cal-days"></div>
+        </div>
+        <p class="hint">期間内の平日をクリックすると休日として設定できます（土日は自動的に休日扱い）</p>
+      </div>
+    </section>
+
+    <!-- ========== タスクページ ========== -->
+    <section class="page hidden" id="page-tasks">
+      <div class="card">
+        <h2 class="section-title">タスク登録</h2>
+        <div class="task-gen-row">
+          <div class="field">
+            <label for="task-count">タスク数</label>
+            <input type="number" id="task-count" min="1" max="999" placeholder="例: 20">
+          </div>
+          <button class="btn-primary" id="btn-generate">一括生成</button>
+        </div>
+        <div class="task-stats-row">
+          <div class="stat-card">
+            <span class="stat-label">総タスク数</span>
+            <span class="stat-value" id="stat-total-tasks">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">完了</span>
+            <span class="stat-value work-val" id="stat-done-tasks">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">未完了</span>
+            <span class="stat-value holiday-val" id="stat-remaining-tasks">0</span>
+          </div>
+        </div>
+        <div class="task-table-wrap">
+          <table class="task-table">
+            <thead>
+              <tr>
+                <th class="col-no">#</th>
+                <th class="col-name">タスク名</th>
+                <th class="col-done">完了</th>
+                <th class="col-date">完了日</th>
+                <th class="col-action"></th>
+              </tr>
+            </thead>
+            <tbody id="task-tbody">
+              <tr class="task-empty-row">
+                <td colspan="5">
+                  <div class="empty-state">
+                    <span class="empty-icon">📋</span>
+                    <p>タスク数を入力して「一括生成」を押してください</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="task-actions">
+          <button class="btn-secondary" id="btn-add-one">＋ 1件追加</button>
+          <button class="btn-danger" id="btn-clear-all">すべて削除</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== チャートページ ========== -->
+    <section class="page hidden" id="page-chart">
+      <div class="card">
+        <h2 class="section-title">バーンアップチャート</h2>
+        <div class="chart-stats-row">
+          <div class="stat-card">
+            <span class="stat-label">総タスク数</span>
+            <span class="stat-value" id="chart-stat-total">－</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">完了</span>
+            <span class="stat-value work-val" id="chart-stat-done">－</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">進捗率</span>
+            <span class="stat-value" id="chart-stat-pct">－</span>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="burnup-chart"></canvas>
+        </div>
+        <div class="chart-bottom">
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#4361ee;border-color:#4361ee;"></span>完了数（実績）</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#e8ecf4;border-color:#bbb;"></span>総タスク数（スコープ）</span>
+            <span class="legend-item"><span class="legend-dot dot-ideal"></span>理想線</span>
+          </div>
+          <div class="chart-img-actions">
+            <button class="btn-secondary" id="btn-copy-img" disabled>📋 コピー</button>
+            <button class="btn-primary"   id="btn-save-png" disabled>⬇ PNG保存</button>
+          </div>
+        </div>
+        <p class="hint" id="chart-hint">タスクと期間を設定するとチャートが表示されます</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="./js/chart.umd.min.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/calendar.js"></script>
+  <script src="./js/tasks.js"></script>
+  <script src="./js/chart.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>
