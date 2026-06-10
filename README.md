@@ -1,7 +1,42 @@
-# Tauri + Vanilla
+# Burn Up Chart デスクトップアプリ
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Javascript.
+Tauri を使用して構築された、シンプルで強力なバーンアップチャート作成ツールです。
 
-## Recommended IDE Setup
+## 特徴
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+-   **期間・稼働日設定**: プロジェクトの開始日と終了日を設定し、休日を個別に指定可能。
+-   **タスク管理**: タスクの一括生成、追加、削除、および完了状態の管理。
+-   **リアルタイムチャート**: 完了数（実績）、総タスク数（スコープ）、理想線を可視化。
+-   **データ保存**: `localStorage` への自動保存に加え、JSON 形式でのインポート/エクスポートに対応。
+-   **ポータビリティ**: ローカル環境で動作し、オフラインでも使用可能。
+-   **マルチテーマ**: ライトモードとダークモードに対応。
+-   **日本語対応**: インストーラー（MSI/NSIS）を含め、完全日本語化。
+
+## 開発環境のセットアップ
+
+### 必須環境
+
+-   [Rust](https://www.rust-lang.org/tools/install)
+-   [Node.js](https://nodejs.org/)
+
+### インストール
+
+```bash
+npm install
+```
+
+### 開発モードでの実行
+
+```bash
+npm run tauri dev
+```
+
+### ビルド
+
+```bash
+npm run tauri build
+```
+
+## ライセンス
+
+MIT

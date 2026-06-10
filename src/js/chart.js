@@ -59,6 +59,11 @@ window.BurnUpChart = (() => {
     const canvas = document.getElementById('burnup-chart');
     if (chartInstance) chartInstance.destroy();
 
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)';
+    const textColor = isDark ? '#94a3b8' : '#999';
+    const borderColor = isDark ? '#334155' : '#e8ecf4';
+
     chartInstance = new Chart(canvas, {
       type: 'line',
       data: {
@@ -112,7 +117,7 @@ window.BurnUpChart = (() => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#1a1a2e',
+            backgroundColor: isDark ? '#0f172a' : '#1a1a2e',
             titleColor: '#fff',
             bodyColor: 'rgba(255,255,255,0.8)',
             padding: 10,
@@ -126,32 +131,33 @@ window.BurnUpChart = (() => {
         },
         scales: {
           x: {
-            grid: { color: 'rgba(0,0,0,0.04)' },
-            ticks: { font: { size: 11 }, color: '#999', maxRotation: 45, autoSkip: true, maxTicksLimit: 15 },
-            border: { color: '#e8ecf4' },
+            grid: { color: gridColor },
+            ticks: { font: { size: 10 }, color: textColor, maxRotation: 45, autoSkip: true, maxTicksLimit: 15 },
+            border: { color: borderColor },
           },
           y: {
             min: 0,
             max: total + Math.ceil(total * 0.05) || 10,
-            grid: { color: 'rgba(0,0,0,0.04)' },
-            ticks: { font: { size: 11 }, color: '#999', stepSize: Math.ceil(total / 10) || 1, precision: 0 },
-            border: { color: '#e8ecf4' },
+            grid: { color: gridColor },
+            ticks: { font: { size: 10 }, color: textColor, stepSize: Math.ceil(total / 10) || 1, precision: 0 },
+            border: { color: borderColor },
           }
         }
       }
     });
   }
 
-  // チャートを白背景の PNG として blob で返す
+  // チャートを白背景（またはダーク背景）の PNG として blob で返す
   function getChartBlob() {
     return new Promise(resolve => {
       if (!chartInstance) { resolve(null); return; }
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const src    = document.getElementById('burnup-chart');
       const off    = document.createElement('canvas');
       off.width    = src.width;
       off.height   = src.height;
       const ctx    = off.getContext('2d');
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = isDark ? '#1e293b' : '#ffffff';
       ctx.fillRect(0, 0, off.width, off.height);
       ctx.drawImage(src, 0, 0);
       off.toBlob(blob => resolve(blob), 'image/png');
