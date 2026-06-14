@@ -11,9 +11,10 @@
     "windows": [
       {
         "label": "main",
-        "title": "Burn Up Chart",
+        "title": "バーンアップチャート",
         "width": 640,
-        "height": 600
+        "height": 600,
+        "resizable": false
       }
     ],
     "security": {
