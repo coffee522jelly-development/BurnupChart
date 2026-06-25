@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "BurnUpChart",
+  "productName": "ShimekiriMiere",
   "version": "0.1.0",
-  "identifier": "com.burnupchart.app",
+  "identifier": "com.shimekirimiere.app",
   "build": {
     "frontendDist": "../src"
   },
@@ -11,7 +11,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "バーンアップチャート",
+        "title": "締め切りミエール",
         "width": 640,
         "height": 600,
         "resizable": false
